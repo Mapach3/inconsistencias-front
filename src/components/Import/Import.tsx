@@ -10,9 +10,11 @@ import {
   Typography,
   Upload,
 } from "antd";
+import Title from "antd/lib/typography/Title";
 import { UploadChangeParam, UploadFile } from "antd/lib/upload/interface";
 import React, { useState } from "react";
 import FileService from "../../api/files/FileService";
+import { FileTest } from "../../models/models";
 
 interface ImportProps {}
 
@@ -21,11 +23,13 @@ const Import: React.FC<ImportProps> = () => {
   const [isUploading, setIsUploading] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [opcion, setOpcion] = useState(0);
+  const [fileTest, setFileTest] = useState<FileTest>();
 
   const handleChange = async (info: UploadChangeParam) => {
     setIsUploading(true);
     if (info.file.status === "removed") {
       setFile(undefined);
+      setFileTest(undefined);
     } else {
       setFile(info.file);
     }
@@ -38,7 +42,7 @@ const Import: React.FC<ImportProps> = () => {
       const formData = new FormData();
       formData.append("file", file as unknown as File);
       const response = await FileService.uploadRuleFile(formData, opcion);
-      console.log(response);
+      setFileTest(response.response as FileTest);
       setIsUploading(false);
     } catch (error: any) {
       if (error.message) {
@@ -69,12 +73,12 @@ const Import: React.FC<ImportProps> = () => {
         </Row>
         {file && (
           <Row gutter={12} style={{ marginTop: "1rem" }}>
-            <Col span={5}>
+            <Col span={5} lg={4} xs={12}>
               <Typography>
                 Selecciona el tipo de inconsistencias a buscar:
               </Typography>
             </Col>
-            <Col span={4}>
+            <Col span={4} lg={4} xs={12}>
               <Select
                 placeholder="Selecciona un valor.."
                 style={{ width: "100%" }}
@@ -93,7 +97,7 @@ const Import: React.FC<ImportProps> = () => {
                 <Select.Option value={5}>Todas</Select.Option>
               </Select>
             </Col>
-            <Col span={6}>
+            <Col span={6} lg={3} xs={12}>
               <Button
                 style={{ width: "50%" }}
                 type="primary"
@@ -105,6 +109,39 @@ const Import: React.FC<ImportProps> = () => {
               </Button>
             </Col>
           </Row>
+        )}
+        {fileTest && (
+          <>
+            <div>
+              <Title type="success" style={{ marginTop: "1rem" }}>
+                ¡Éxito!
+              </Title>
+              <Title type="success" level={4}>
+                El archivo fue importado con éxito
+              </Title>
+              <Title level={4}>Listado de Reglas analizadas:</Title>
+              {fileTest.reglas.map((regla, index) => (
+                <p>{regla}</p>
+              ))}
+
+              <Title level={4}>Resultado del análisis: </Title>
+              {fileTest.resultado.length
+                ? fileTest.resultado.map((resultado) => <p>{resultado}</p>)
+                : "No se encontraron inconsistencias en el listado analizado."}
+            </div>
+            <div>
+              <Button
+                style={{ marginTop: "1rem" }}
+                type="primary"
+                onClick={() => {
+                  setFile(undefined);
+                  setFileTest(undefined);
+                }}
+              >
+                Realizar otra prueba
+              </Button>
+            </div>
+          </>
         )}
       </Card>
     </>
