@@ -1,9 +1,11 @@
 import React from "react";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
+import Login from "../components/Login";
 import { ClientRoutes } from "../config/enums";
 import DashboardPage from "../pages/DashboardPage";
 import FilesPage from "../pages/FilesPage";
 import ImportPage from "../pages/ImportPage";
+import PrivateRoute from "./PrivateRoute";
 
 const Routes: React.FC = () => {
   return (
@@ -18,8 +20,12 @@ const Routes: React.FC = () => {
           <ImportPage />
         </Route>
 
-        <Route exact path={ClientRoutes.ARCHIVOS}>
+        <PrivateRoute path={ClientRoutes.ARCHIVOS}>
           <FilesPage />
+        </PrivateRoute>
+
+        <Route exact path={ClientRoutes.LOGIN}>
+          <Login />
         </Route>
       </Switch>
     </BrowserRouter>

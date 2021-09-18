@@ -1,4 +1,4 @@
-import { Menu } from "antd";
+import { Menu, Tooltip } from "antd";
 import Sider from "antd/lib/layout/Sider";
 import { useState } from "react";
 import { useHistory, useLocation } from "react-router-dom";
@@ -26,33 +26,37 @@ export const SideMenu: React.FC = () => {
         mode="inline"
         selectedKeys={[location.pathname]}
         className="site-layout-background"
+        inlineCollapsed={isCollapsed}
       >
         <Menu.Item
           key={ClientRoutes.DASHBOARD}
           onClick={() => history.push(ClientRoutes.DASHBOARD)}
+          icon={<DashboardOutlined />}
         >
-          <>
-            <DashboardOutlined />
-            <span>Dashboard</span>
-          </>
+          <span>Dashboard</span>
         </Menu.Item>
         <Menu.Item
           key={ClientRoutes.IMPORTAR}
           onClick={() => history.push(ClientRoutes.IMPORTAR)}
+          icon={<FileAddOutlined />}
         >
-          <>
-            <FileAddOutlined />
-            <span>Importar</span>
-          </>
+          <span>Importar</span>
         </Menu.Item>
+
         <Menu.Item
           key={ClientRoutes.ARCHIVOS}
           onClick={() => history.push(ClientRoutes.ARCHIVOS)}
+          icon={<FileSearchOutlined />}
+          disabled={!localStorage.getItem("InconsistenciasAPP.JWT")}
         >
-          <>
-            <FileSearchOutlined />
+          <Tooltip
+            title={
+              !localStorage.getItem("InconsistenciasAPP.JWT") &&
+              "Ingresá para ver tus archivos"
+            }
+          >
             <span>Mis Archivos</span>
-          </>
+          </Tooltip>
         </Menu.Item>
       </Menu>
     </Sider>
