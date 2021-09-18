@@ -12,3 +12,11 @@ export interface FileTest{
 export interface LoginResponse{
     accessToken: string;
 }
+
+export interface Archivo{
+    id: number;
+    fechaAlta: string;
+    nombreArchivo: string;
+    reglasArchivo: any;
+    resultadoArchivo: any;
+}

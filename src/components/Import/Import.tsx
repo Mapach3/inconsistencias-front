@@ -3,6 +3,7 @@ import {
   Button,
   Card,
   Col,
+  Divider,
   List,
   message,
   Row,
@@ -44,6 +45,11 @@ const Import: React.FC<ImportProps> = () => {
       formData.append("file", file as unknown as File);
       const response = await FileService.uploadRuleFile(formData, opcion);
       setFileTest(response.response as FileTest);
+      debugger;
+      if (localStorage.getItem("InconsistenciasAPP.Usuario")) {
+        const insertResponse = await FileService.saveRuleFile(formData);
+        console.log(insertResponse);
+      }
       setIsUploading(false);
     } catch (error: any) {
       if (error.message) {
@@ -71,12 +77,12 @@ const Import: React.FC<ImportProps> = () => {
       </Row>
       {file && (
         <Row gutter={12} style={{ marginTop: "1rem" }}>
-          <Col span={5} lg={4} xs={12}>
+          <Col span={5} lg={6} xs={12}>
             <Typography>
               Selecciona el tipo de inconsistencias a buscar:
             </Typography>
           </Col>
-          <Col span={4} lg={4} xs={12}>
+          <Col span={4} lg={6} xs={12}>
             <Select
               placeholder="Selecciona un valor.."
               style={{ width: "100%" }}
@@ -93,7 +99,7 @@ const Import: React.FC<ImportProps> = () => {
               <Select.Option value={5}>Todas</Select.Option>
             </Select>
           </Col>
-          <Col span={6} lg={3} xs={12}>
+          <Col span={6} lg={7} xs={12}>
             <Button
               style={{ width: "50%" }}
               type="primary"
@@ -106,6 +112,7 @@ const Import: React.FC<ImportProps> = () => {
           </Col>
         </Row>
       )}
+      <Divider />
       {fileTest && (
         <>
           <div>

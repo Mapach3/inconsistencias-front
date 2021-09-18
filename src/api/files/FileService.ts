@@ -13,6 +13,28 @@ class FileService {
 
     return FetchService.processResponse(response);
   }
-}
+
+  static async saveRuleFile(formData: FormData){
+    const headers = FetchService.getHeaders();
+    headers.delete("Content-Type");
+    const response = await fetch(`${API_URL}/Archivo/insertarArchivo`, {
+      headers,
+      body: formData,
+      method: "POST",
+    });
+
+    return FetchService.processResponse(response);
+  }
+
+  static async getFiles(usuario: string){
+      const headers = FetchService.getHeaders();
+      const response = await fetch(`${API_URL}/Archivo/traerArchivos?usuario=${usuario}`, {
+        headers,
+        method: "GET",
+      });
+  
+      return FetchService.processResponse(response);
+    }
+  }
 
 export default FileService;
