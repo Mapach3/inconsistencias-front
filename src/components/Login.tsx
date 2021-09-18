@@ -19,7 +19,6 @@ const Login: React.FC = () => {
 
   const handleSubmit = async () => {
     try {
-      debugger;
       setIsSubmitting(true);
       let values = await form.validateFields();
 
@@ -32,7 +31,6 @@ const Login: React.FC = () => {
       localStorage.setItem("InconsistenciasAPP.JWT", token);
       localStorage.setItem("InconsistenciasAPP.Usuario", values.usuario);
       message.success("Login exitoso!");
-      debugger;
       setTimeout(() => history.push(ClientRoutes.DASHBOARD), 1000);
     } catch (error: any) {
       if (error.message) {
@@ -45,46 +43,50 @@ const Login: React.FC = () => {
 
   return (
     <Layout>
-      <div
-        style={{
-          width: "50%",
-          marginLeft: "auto",
-          marginRight: "auto",
-          textAlign: "center",
-        }}
-      >
-        <Form
-          form={form}
-          layout="horizontal"
-          labelCol={{ span: 5 }}
-          wrapperCol={{ span: 15 }}
-          autoComplete="off"
-          onSubmitCapture={handleSubmit}
+      {localStorage.getItem("InconsistenciasAPP.JWT") ? (
+        <>Debes cerrar sesión para poder entrar con otra cuenta</>
+      ) : (
+        <div
+          style={{
+            width: "50%",
+            marginLeft: "auto",
+            marginRight: "auto",
+            textAlign: "center",
+          }}
         >
-          <Form.Item
-            label="Usuario"
-            name="usuario"
-            rules={[{ required: true, message: "Completa este campo" }]}
+          <Form
+            form={form}
+            layout="horizontal"
+            labelCol={{ span: 5 }}
+            wrapperCol={{ span: 15 }}
+            autoComplete="off"
+            onSubmitCapture={handleSubmit}
           >
-            <Input />
-          </Form.Item>
-          <Form.Item
-            label="Contraseña"
-            name="contraseña"
-            rules={[{ required: true, message: "Completa este campo" }]}
-          >
-            <Input.Password />
-          </Form.Item>
-          <Button
-            type="primary"
-            htmlType="submit"
-            loading={isSubmitting}
-            disabled={isSubmitting}
-          >
-            Ingresar
-          </Button>
-        </Form>
-      </div>
+            <Form.Item
+              label="Usuario"
+              name="usuario"
+              rules={[{ required: true, message: "Completa este campo" }]}
+            >
+              <Input />
+            </Form.Item>
+            <Form.Item
+              label="Contraseña"
+              name="contraseña"
+              rules={[{ required: true, message: "Completa este campo" }]}
+            >
+              <Input.Password />
+            </Form.Item>
+            <Button
+              type="primary"
+              htmlType="submit"
+              loading={isSubmitting}
+              disabled={isSubmitting}
+            >
+              Ingresar
+            </Button>
+          </Form>
+        </div>
+      )}
     </Layout>
   );
 };

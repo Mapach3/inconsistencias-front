@@ -4,6 +4,7 @@ import { Content, Header } from "antd/lib/layout/layout";
 import { SideMenu } from "./SideMenu";
 import { useHistory } from "react-router";
 import { ClientRoutes } from "../config/enums";
+import LoginService from "../api/login/LoginService";
 
 const Layout: React.FC = ({ children }) => {
   const history = useHistory();
@@ -33,7 +34,10 @@ const Layout: React.FC = ({ children }) => {
             {localStorage.getItem("InconsistenciasAPP.JWT") && (
               <Button
                 type="primary"
-                onClick={() => history.push(ClientRoutes.LOGOUT)}
+                onClick={() => {
+                  LoginService.Logout();
+                  history.push(ClientRoutes.LOGOUT);
+                }}
               >
                 Salir
               </Button>

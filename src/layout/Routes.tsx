@@ -1,6 +1,7 @@
 import React from "react";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 import Login from "../components/Login";
+import Logout from "../components/Logout";
 import { ClientRoutes } from "../config/enums";
 import DashboardPage from "../pages/DashboardPage";
 import FilesPage from "../pages/FilesPage";
@@ -26,6 +27,10 @@ const Routes: React.FC = () => {
 
         <Route exact path={ClientRoutes.LOGIN}>
           <Login />
+        </Route>
+
+        <Route exact path={ClientRoutes.LOGOUT}>
+          <Logout />
         </Route>
       </Switch>
     </BrowserRouter>
