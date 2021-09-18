@@ -35,6 +35,21 @@ class FileService {
   
       return FetchService.processResponse(response);
     }
+
+    
+  static async getFileForDownload(fileId: number){
+    const headers = FetchService.getHeaders();
+    const response = await fetch(`${API_URL}/Archivo/traerArchivoTipoFile?id=${fileId}`, {
+      headers,
+      method: "GET",
+    });
+    debugger;
+    return FetchService.processFileResponse(response);
   }
+
+
+  }
+
+
 
 export default FileService;

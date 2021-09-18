@@ -14,7 +14,7 @@ export interface LoginResponse{
 }
 
 export interface Archivo{
-    id: number;
+    idInsercion: number;
     fechaAlta: string;
     nombreArchivo: string;
     reglasArchivo: any;

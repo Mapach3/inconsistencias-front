@@ -85,12 +85,33 @@ const FilesGrid: React.FC = () => {
             />
           </Tooltip>
           <Tooltip title="Descargar archivo">
-            <Button icon={<DownloadOutlined />} />
+            <Button
+              icon={<DownloadOutlined />}
+              onClick={() => handleFileDownload(row.idInsercion)}
+            />
           </Tooltip>
         </>
       ),
     },
   ];
+
+  const handleFileDownload = async (fileId: number) => {
+    const fileResponse = await FileService.getFileForDownload(fileId);
+    const objectUrl: string = window.URL.createObjectURL(
+      new Blob([fileResponse])
+    );
+    const a: HTMLAnchorElement = document.createElement(
+      "a"
+    ) as HTMLAnchorElement;
+
+    a.href = objectUrl;
+    a.download = "Reglas.txt";
+    document.body.appendChild(a);
+    a.click();
+
+    console.log(fileResponse);
+  };
+
   return (
     <>
       <Card title="Mis Archivos">

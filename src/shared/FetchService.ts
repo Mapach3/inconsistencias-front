@@ -23,6 +23,16 @@ class FetchService {
       throw new Error(`${apiResponse.errorMessage} - Error ${apiResponse.codeError}`);
     }
   }
+
+  static async processFileResponse(response: Response) {
+debugger;
+    if (response.status === 200){
+      return await response.blob();
+    }else{
+      throw new Error("Ha ocurrido un error");
+
+    }
+  }
   
   static async processLoginResponse(response: Response){
     ;
