@@ -3,6 +3,7 @@ import {
   Button,
   Card,
   Col,
+  List,
   message,
   Row,
   Select,
@@ -54,97 +55,105 @@ const Import: React.FC<ImportProps> = () => {
   };
 
   return (
-    <>
-      <Card title="Importar reglas">
-        <Row gutter={12}>
-          <div style={{ float: "left" }}>
-            <Upload
-              beforeUpload={() => false}
-              fileList={file ? [file] : []}
-              onChange={handleChange}
-              accept=".txt"
+    <Card title="Importar reglas">
+      <Row gutter={12}>
+        <div style={{ float: "left" }}>
+          <Upload
+            beforeUpload={() => false}
+            fileList={file ? [file] : []}
+            onChange={handleChange}
+            accept=".txt"
+          >
+            <Button icon={<UploadOutlined />}>Click para subir archivo</Button>
+          </Upload>
+          {isUploading && <Spin tip="Cargando archivo..." />}
+        </div>
+      </Row>
+      {file && (
+        <Row gutter={12} style={{ marginTop: "1rem" }}>
+          <Col span={5} lg={4} xs={12}>
+            <Typography>
+              Selecciona el tipo de inconsistencias a buscar:
+            </Typography>
+          </Col>
+          <Col span={4} lg={4} xs={12}>
+            <Select
+              placeholder="Selecciona un valor.."
+              style={{ width: "100%" }}
+              onChange={(value: number) => setOpcion(value)}
+              showSearch
+              optionFilterProp="children"
             >
-              <Button icon={<UploadOutlined />}>
-                Click para subir archivo
-              </Button>
-            </Upload>
-            {isUploading && <Spin tip="Cargando archivo..." />}
-          </div>
+              <Select.Option value={1}>Reglas Redundantes</Select.Option>
+              <Select.Option value={2}>Reglas Conflictivas</Select.Option>
+              <Select.Option value={3}>Reglas Incluidas en Otras</Select.Option>
+              <Select.Option value={4}>
+                Condiciones Si Innecesarias
+              </Select.Option>
+              <Select.Option value={5}>Todas</Select.Option>
+            </Select>
+          </Col>
+          <Col span={6} lg={3} xs={12}>
+            <Button
+              style={{ width: "50%" }}
+              type="primary"
+              loading={isSubmitting}
+              disabled={isSubmitting || opcion === 0}
+              onClick={handleSubmit}
+            >
+              Buscar
+            </Button>
+          </Col>
         </Row>
-        {file && (
-          <Row gutter={12} style={{ marginTop: "1rem" }}>
-            <Col span={5} lg={4} xs={12}>
-              <Typography>
-                Selecciona el tipo de inconsistencias a buscar:
-              </Typography>
-            </Col>
-            <Col span={4} lg={4} xs={12}>
-              <Select
-                placeholder="Selecciona un valor.."
-                style={{ width: "100%" }}
-                onChange={(value: number) => setOpcion(value)}
-                showSearch
-                optionFilterProp="children"
-              >
-                <Select.Option value={1}>Reglas Redundantes</Select.Option>
-                <Select.Option value={2}>Reglas Conflictivas</Select.Option>
-                <Select.Option value={3}>
-                  Reglas Incluidas en Otras
-                </Select.Option>
-                <Select.Option value={4}>
-                  Condiciones Si Innecesarias
-                </Select.Option>
-                <Select.Option value={5}>Todas</Select.Option>
-              </Select>
-            </Col>
-            <Col span={6} lg={3} xs={12}>
-              <Button
-                style={{ width: "50%" }}
-                type="primary"
-                loading={isSubmitting}
-                disabled={isSubmitting || opcion === 0}
-                onClick={handleSubmit}
-              >
-                Buscar
-              </Button>
-            </Col>
-          </Row>
-        )}
-        {fileTest && (
-          <>
-            <div>
-              <Title type="success" style={{ marginTop: "1rem" }}>
-                ¡Éxito!
-              </Title>
-              <Title type="success" level={4}>
-                El archivo fue importado con éxito
-              </Title>
-              <Title level={4}>Listado de Reglas analizadas:</Title>
-              {fileTest.reglas.map((regla, index) => (
-                <p>{regla}</p>
-              ))}
+      )}
+      {fileTest && (
+        <>
+          <div>
+            <Title type="success" style={{ marginTop: "1rem" }}>
+              ¡Éxito!
+            </Title>
+            <Title type="success" level={4}>
+              El archivo fue importado con éxito
+            </Title>
+            <Title level={4}>Listado de Reglas analizadas:</Title>
+            <List
+              grid={{ column: 3 }}
+              bordered
+              itemLayout="vertical"
+              dataSource={fileTest.reglas}
+              renderItem={(item) => <List.Item>{`> ${item}`}</List.Item>}
+            />
 
-              <Title level={4}>Resultado del análisis: </Title>
-              {fileTest.resultado.length
-                ? fileTest.resultado.map((resultado) => <p>{resultado}</p>)
-                : "No se encontraron inconsistencias en el listado analizado."}
-            </div>
-            <div>
-              <Button
-                style={{ marginTop: "1rem" }}
-                type="primary"
-                onClick={() => {
-                  setFile(undefined);
-                  setFileTest(undefined);
-                }}
-              >
-                Realizar otra prueba
-              </Button>
-            </div>
-          </>
-        )}
-      </Card>
-    </>
+            <Title level={4} style={{ paddingTop: "1rem" }}>
+              Resultado del análisis:{" "}
+            </Title>
+            {fileTest.resultado.length ? (
+              <List
+                itemLayout="vertical"
+                grid={{ column: 2 }}
+                bordered
+                dataSource={fileTest.resultado}
+                renderItem={(item) => <List.Item>{`> ${item}`}</List.Item>}
+              />
+            ) : (
+              "No se encontraron inconsistencias en el listado analizado."
+            )}
+          </div>
+          <div>
+            <Button
+              style={{ marginTop: "1rem" }}
+              type="primary"
+              onClick={() => {
+                setFile(undefined);
+                setFileTest(undefined);
+              }}
+            >
+              Realizar otra prueba
+            </Button>
+          </div>
+        </>
+      )}
+    </Card>
   );
 };
 

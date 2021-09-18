@@ -4,7 +4,7 @@ import { ResponseGenericApi } from "../models/models";
 class FetchService {
   static getHeaders() {
     const headers = new Headers();
-    headers.append("Content-Type", "aplication/json");
+    headers.append("Content-Type", "application/json");
 
     const jwtToken = getToken;
     if (jwtToken) {
@@ -22,7 +22,17 @@ class FetchService {
     }else{
       throw new Error(`${apiResponse.errorMessage} - Error ${apiResponse.codeError}`);
     }
+  }
+  
+  static async processLoginResponse(response: Response){
+    debugger;
+    if (response.status === 200){
+      return await response.json() as ResponseGenericApi;
+    }
 
+    if (response.status === 401){
+      throw new Error("Credenciales Inválidas");
+    }
   }
 }
 
