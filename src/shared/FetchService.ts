@@ -25,7 +25,7 @@ class FetchService {
   }
   
   static async processLoginResponse(response: Response){
-    debugger;
+    ;
     if (response.status === 200){
       return await response.json() as ResponseGenericApi;
     }

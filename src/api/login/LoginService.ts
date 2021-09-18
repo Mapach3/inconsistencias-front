@@ -15,6 +15,11 @@ class LoginService{
         return FetchService.processLoginResponse(response);
     }
 
+    static async Logout(){
+        localStorage.removeItem("InconsistenciasAPP.JWT");
+        localStorage.removeItem("InconsistenciasAPP.Usuario");
+    }
+
 
 }
 
